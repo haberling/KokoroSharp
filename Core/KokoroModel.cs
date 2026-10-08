@@ -19,6 +19,12 @@ public sealed class KokoroModel : IDisposable {
         session = new InferenceSession(modelPath, options ?? defaultOptions);
     }
 
+    // Rhetor: a Store package file can be read, but Windows denies mapping it.
+    // InferenceSession(byte[]) parses the buffer during this call and does not keep the array.
+    public KokoroModel(byte[] model, SessionOptions options = null) {
+        session = new InferenceSession(model, options ?? defaultOptions);
+    }
+
     /// <summary> Requests inference with the Model via the ONNX runtime, with specified tokens, style, and speed. </summary>
     /// <remarks> Synchronously waits for the output (audio samples), and returns them when ready. Best used in async context. </remarks>
     public float[] Infer(int[] tokens, float[,,] voiceStyle, float speed = 1) => Infer(tokens, voiceStyle, speed, out _);
