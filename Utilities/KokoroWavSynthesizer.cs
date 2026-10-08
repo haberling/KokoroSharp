@@ -17,6 +17,9 @@ public partial class KokoroWavSynthesizer : KokoroEngine {
     /// <summary> Creates a new instance that allows synthesizing audio without speaking it. </summary>
     public KokoroWavSynthesizer(string modelPath, SessionOptions options = null) : base(modelPath, options) { }
 
+    // Rhetor: Rhetor constructs this type. The bytes come from a normal read of the bundled model.
+    public KokoroWavSynthesizer(byte[] model, SessionOptions options = null) : base(model, options) { }
+
     /// <summary> Inferences with the model to speak the text with specified voice after segmenting it, and returns the bytes that the total audio consists of. </summary>
     public byte[] Synthesize(string text, KokoroVoice voice, KokoroTTSPipelineConfig pipelineConfig = null) => Task.Run(() => SynthesizeAsync(text, voice, pipelineConfig)).Result;
 

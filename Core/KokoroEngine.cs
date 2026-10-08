@@ -12,8 +12,16 @@ public class KokoroEngine : IDisposable {
 
     /// <summary> Creates a new Kokoro Engine instance, loading the model into memory and initializing a background worker thread to continuously scan for newly queued jobs, dispatching them in order, when it's free. </summary>
     /// <remarks> If 'options' is specified, the model will be loaded with them. This is particularly useful when needing to run on non-CPU backends, as the default backend otherwise is the CPU with 8 threads. </remarks>
-    public KokoroEngine(string modelPath, SessionOptions options = null) {
-        model = new KokoroModel(modelPath, options);
+    public KokoroEngine(string modelPath, SessionOptions options = null)
+        : this(new KokoroModel(modelPath, options)) { }
+
+    // Rhetor: load model bytes so the ONNX file is never mapped.
+    public KokoroEngine(byte[] model, SessionOptions options = null)
+        : this(new KokoroModel(model, options)) { }
+
+    // Rhetor: both constructors share the job thread. A bytes-built engine has to start it too.
+    private KokoroEngine(KokoroModel loaded) {
+        model = loaded;
 
         new Thread(() => {
             foreach (var kokoroJob in queuedJobs.GetConsumingEnumerable()) {

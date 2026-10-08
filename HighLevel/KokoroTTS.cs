@@ -47,6 +47,9 @@ public sealed partial class KokoroTTS : KokoroEngine {
     /// </summary>
     public KokoroTTS(string modelPath, SessionOptions options = null) : base(modelPath, options) { }
 
+    // Rhetor: same bytes entry as KokoroWavSynthesizer.
+    public KokoroTTS(byte[] model, SessionOptions options = null) : base(model, options) { }
+
     /// <summary> Speaks the text with the specified voice, without segmenting it (max 510 tokens), resulting in a slower, yet potentially higher quality response. </summary>
     /// <remarks> This is the simplest, highest-level interface of the library. For more fine-grained controls, see <see cref="KokoroEngine"/>. </remarks>
     /// <param name="text"> The text to speak. </param>
